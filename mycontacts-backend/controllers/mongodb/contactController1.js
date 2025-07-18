@@ -6,9 +6,12 @@ const Contact = require("../../models/mongodb/contactModel");
 // @access public
 
 const getContactDb = asyncHandler(async (req, res) => {
-  return res
-    .status(200)
-    .json({ message: `Got contact details of ${req.params.id}` });
+  const contact = await Contact.findById(req.params.id);
+  if (!contact) {
+    res.status(404);
+    throw new Error("Cannot find contact");
+  }
+  return res.status(200).json(contact);
 });
 
 // @desc Get all contact
@@ -25,9 +28,17 @@ const getContactsDb = asyncHandler(async (req, res) => {
 // @access public
 
 const updateContactDb = asyncHandler(async (req, res) => {
-  return res
-    .status(200)
-    .json({ message: `Updated details of ${req.params.id}` });
+  const contact = await Contact.findById(req.params.id);
+  if (!contact) {
+    res.status(404);
+    throw new Error("Cannot find contact");
+  }
+  const updatedContact = await Contact.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
+  return res.status(200).json(updatedContact);
 });
 
 // @desc Create contact
