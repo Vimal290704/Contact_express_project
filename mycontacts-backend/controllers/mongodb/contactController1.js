@@ -40,7 +40,12 @@ const createContactDb = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("All fields are required");
   }
-  return res.status(200).json({ message: `Created contact ${name}` });
+  const contact = await Contact.create({
+    name,
+    email,
+    phone,
+  });
+  return res.status(200).json(contact);
 });
 
 // @desc Delete particular contact
