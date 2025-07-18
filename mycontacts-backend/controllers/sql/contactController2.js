@@ -1,12 +1,11 @@
 const asyncHandler = require("express-async-handler");
-const Contact = require("../models/contactModel");
+const contact = require("../../models/sql/contactModel")
 
 // @desc Get particular contact
 // @route GET /api/contacts/:id
 // @access public
 
-const getContact = asyncHandler(async (req, res) => {
-  const contacts = Contact.find();
+const getContactSql = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json({ message: `Got contact details of ${req.params.id}` });
@@ -16,15 +15,20 @@ const getContact = asyncHandler(async (req, res) => {
 // @route GET /api/contacts/
 // @access public
 
-const getContacts = asyncHandler(async (req, res) => {
-  return res.status(200).json({ message: `Got all contacts` });
+const getContactsSql = asyncHandler(async (req, res) => {
+  try {
+    const [rows] = await contact.findAll()
+    return res.status(200).json(rows);
+  } catch (err) {
+    console.error(err.message);
+  }
 });
 
 // @desc Update particular contact
 // @route PUT /api/contacts/:id
 // @access public
 
-const updateContact = asyncHandler(async (req, res) => {
+const updateContactSql = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json({ message: `Updated details of ${req.params.id}` });
@@ -34,7 +38,7 @@ const updateContact = asyncHandler(async (req, res) => {
 // @route POST /api/contacts/
 // @access public
 
-const createContact = asyncHandler(async (req, res) => {
+const createContactSql = asyncHandler(async (req, res) => {
   const { name, email, phone } = req.body;
   if (!name || !email || !phone) {
     res.status(400);
@@ -47,16 +51,16 @@ const createContact = asyncHandler(async (req, res) => {
 // @route DELETE /api/contacts/:id
 // @access public
 
-const deleteContact = asyncHandler(async (req, res) => {
+const deleteContactSql = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json({ message: `Deleted contact details of ${req.params.id}` });
 });
 
 module.exports = {
-  getContact,
-  getContacts,
-  createContact,
-  updateContact,
-  deleteContact,
+  getContactSql,
+  getContactsSql,
+  createContactSql,
+  updateContactSql,
+  deleteContactSql,
 };
