@@ -27,7 +27,7 @@ const getContactsSql = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Update particular contact
+// @descUpdate particular contact
 // @route PUT /api/contacts/:id
 // @access public
 
