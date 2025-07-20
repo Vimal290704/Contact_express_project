@@ -21,6 +21,7 @@ const contactSchema = sequelize.define(
   {
     tableName: "contacts",
     timestamps: true,
+    paranoid: true
   }
 );
 

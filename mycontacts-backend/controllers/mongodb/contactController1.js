@@ -64,9 +64,13 @@ const createContactDb = asyncHandler(async (req, res) => {
 // @access public
 
 const deleteContactDb = asyncHandler(async (req, res) => {
-  return res
-    .status(200)
-    .json({ message: `Deleted contact details of ${req.params.id}` });
+  const contact = await Contact.findByIdAndDelete(req.params.id);
+  console.log(contact)
+  if (!contact) {
+    res.status(404);
+    throw new Error("Contact not found");
+  }
+  res.status(200).json(contact);
 });
 
 module.exports = {
