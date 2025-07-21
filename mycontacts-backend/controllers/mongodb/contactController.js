@@ -19,7 +19,7 @@ const getContactDb = asyncHandler(async (req, res) => {
 // @access public
 
 const getContactsDb = asyncHandler(async (req, res) => {
-  const contacts = await Contact.find();
+  const contacts = await Contact.find({ user_id: req.user.id });
   return res.status(200).json(contacts);
 });
 
@@ -32,6 +32,11 @@ const updateContactDb = asyncHandler(async (req, res) => {
   if (!contact) {
     res.status(404);
     throw new Error("Cannot find contact");
+  }
+
+  if (contact.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error("Access denied");
   }
   const updatedContact = await Contact.findByIdAndUpdate(
     req.params.id,
@@ -55,6 +60,7 @@ const createContactDb = asyncHandler(async (req, res) => {
     name,
     email,
     phone,
+    user_id: req.user.id,
   });
   return res.status(200).json(contact);
 });
@@ -64,12 +70,16 @@ const createContactDb = asyncHandler(async (req, res) => {
 // @access public
 
 const deleteContactDb = asyncHandler(async (req, res) => {
-  const contact = await Contact.findByIdAndDelete(req.params.id);
-  console.log(contact)
+  let contact = Contact.findById(req.params.id);
   if (!contact) {
     res.status(404);
     throw new Error("Contact not found");
   }
+  if (contact.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error("Access denied");
+  }
+  contact = await Contact.findByIdAndDelete(req.params.id);
   res.status(200).json(contact);
 });
 

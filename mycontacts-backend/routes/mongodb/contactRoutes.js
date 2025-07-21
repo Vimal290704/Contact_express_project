@@ -7,8 +7,9 @@ const {
   createContactDb,
   updateContactDb,
   deleteContactDb,
-} = require("../../controllers/mongodb/contactController1");
-
+} = require("../../controllers/mongodb/contactController");
+const validateToken = require("../../middleware/validateTokenHandler");
+router.use(validateToken);
 router.route("/").get(getContactsDb).post(createContactDb);
 router
   .route("/:id")

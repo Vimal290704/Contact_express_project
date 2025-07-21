@@ -6,7 +6,7 @@ const contact = require("../../models/sql/contactModel");
 // @access public
 
 const getContactSql = asyncHandler(async (req, res) => {
-  const Contact = await contact.findOne({ where: { id: req.params.id } });
+  const Contact = await contact.findByPk(req.params.id );
   if (!Contact) {
     res.status(400);
     throw new Error("Contact not found");
@@ -64,7 +64,6 @@ const createContactSql = asyncHandler(async (req, res) => {
     email,
     phone,
   });
-  console.log(newContact);
   return res.status(200).json(newContact);
 });
 

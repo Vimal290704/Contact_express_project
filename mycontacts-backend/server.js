@@ -40,9 +40,12 @@ async function startServer() {
 startServer();
 
 // CREATING MIDDLEWARE: MAIN ROUTE THAT IS CREATING ROUTES FOR DIFFERENT ONES
-// Ensure these route files exist and correctly export Express Router instances
-app.use("/api/contacts/db", require("./routes/mongodb/contactRoutes1")); // Assuming this is MongoDB related
-app.use("/api/contacts/sql", require("./routes/sql/contactRoutes2")); // Assuming this is MySQL related
+app.use("/api/contacts/db", require("./routes/mongodb/contactRoutes"));
+app.use("/api/contacts/sql", require("./routes/sql/contactRoutes"));
+
+// MIDDLEWARE : To register Users
+app.use("/api/users/db", require("./routes/mongodb/userRoutes"));
+app.use("/api/users/sql", require("./routes/sql/userRoutes"));
 
 // Custom ErrorHandler from middleware
 app.use(errorHandler);

@@ -7,7 +7,7 @@ const {
   createContactSql,
   updateContactSql,
   deleteContactSql,
-} = require("../../controllers/sql/contactController2");
+} = require("../../controllers/sql/contactController");
 
 router.route("/").get(getContactsSql).post(createContactSql);
 router
